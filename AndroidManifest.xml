@@ -26,6 +26,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".AppsWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- AppsWidgetProvider接收GridView的响应事件 -->
+                <action android:name="com.wzystal.dynamicloader.COLLECTION_VIEW_ACTION" />
+                <!-- AppsWidgetProvider接收GridView中按钮的响应事件 -->
+                <action android:name="com.wzystal.dynamicloader.BT_REFRESH_ACTION" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@layout/widget_provider" />
+        </receiver>
+
+        <service
+            android:name=".AppsWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <activity
             android:name="com.ryg.dynamicload.DLProxyActivity"
             android:label="@string/app_name" >
