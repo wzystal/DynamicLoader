@@ -1,15 +1,11 @@
 package com.wzystal.dynamicloader.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 
-import com.ryg.utils.DLUtils;
-
 public class DLHelper{
-	
 	public static Bitmap drawable2Bitmap(Drawable drawable) {
 		// 取 drawable 的长宽
 		int w = drawable.getIntrinsicWidth();

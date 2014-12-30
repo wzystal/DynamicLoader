@@ -7,6 +7,7 @@ import com.ryg.utils.DLUtils;
 import com.wzystal.dynamicloader.Plugin;
 import com.wzystal.dynamicloader.R;
 import com.wzystal.dynamicloader.util.DLHelper;
+import com.wzystal.dynamicloader.util.LogHelper;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -31,6 +32,7 @@ public class PluginsWidgetService extends RemoteViewsService {
 			mContext = context;
 			mWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
+			LogHelper.d(TAG, "GridRemoteViewsFactory.mWidgetId:" + mWidgetId);
 		}
 
 		@Override
@@ -99,7 +101,8 @@ public class PluginsWidgetService extends RemoteViewsService {
 		}
 
 		@Override
-		public void onDataSetChanged() {}
+		public void onDataSetChanged() {
+		}
 
 		@Override
 		public void onDestroy() {
