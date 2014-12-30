@@ -9,8 +9,4 @@ public class PluginsWidgetService extends RemoteViewsService{
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
 		return null;
 	}
-	
-	class GridViewsFactory implements RemoteViewsFactory{
-		
-	}
 }

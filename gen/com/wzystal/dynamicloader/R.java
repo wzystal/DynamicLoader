@@ -27,8 +27,7 @@ public final class R {
         public static final int icon_widget=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f080004;
-        public static final int gridview_apps=0x7f080003;
+        public static final int action_settings=0x7f080003;
         public static final int gridview_plugins=0x7f080000;
         public static final int iv_plugin_icon=0x7f080001;
         public static final int tv_plugin_name=0x7f080002;
@@ -36,8 +35,8 @@ public final class R {
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int item_plugin=0x7f030001;
-        public static final int widget_apps=0x7f030002;
-        public static final int widget_apps_keyguard=0x7f030003;
+        public static final int widget_plugins=0x7f030002;
+        public static final int widget_plugins_keyguard=0x7f030003;
         public static final int widget_provider=0x7f030004;
     }
     public static final class menu {
