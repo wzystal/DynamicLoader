@@ -5,9 +5,13 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
+
 import com.wzystal.dynamicloader.R;
 import com.wzystal.dynamicloader.util.LogHelper;
+
 import static com.wzystal.dynamicloader.util.Constant.*;
 
 public class PluginsWidgetProvider extends AppWidgetProvider {
@@ -35,7 +39,7 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		System.out.println(CLASS_NAME + ".onUpdate() called!");
-		LogHelper.d(TAG, CLASS_NAME + ".onUpdate() called!");
+		Log.d(TAG, CLASS_NAME + ".onUpdate() called!");
 		for (int widgetId : appWidgetIds) {
 			// AppWidget中的视图及其绑定事件，都是通过RemoteViews来管理的
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -48,6 +52,7 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			// 更新AppWidget管理器
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
+		Toast.makeText(context, CLASS_NAME + ".onUpdate() called!", Toast.LENGTH_LONG).show();
 	}
 
 	// widget从桌面移除时调用
