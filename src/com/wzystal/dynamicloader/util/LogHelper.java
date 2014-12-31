@@ -14,9 +14,9 @@ public class LogHelper {
 	}
 
 	public static void d(String tag, String msg) {
-		if (showLog) {
+//		if (showLog) {
 			Log.d(tag, msg);
-		}
+//		}
 	}
 
 	public static void e(String tag, String msg) {

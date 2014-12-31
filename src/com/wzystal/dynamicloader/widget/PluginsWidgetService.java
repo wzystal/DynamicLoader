@@ -18,6 +18,8 @@ import android.widget.RemoteViewsService;
 import static com.wzystal.dynamicloader.util.Constant.*;
 
 public class PluginsWidgetService extends RemoteViewsService {
+	private static final String CLASS_NAME = "PluginsWidgetService";
+	
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
 		return new GridRemoteViewsFactory(this, intent);
@@ -37,6 +39,7 @@ public class PluginsWidgetService extends RemoteViewsService {
 
 		@Override
 		public void onCreate() {
+			LogHelper.d(TAG, CLASS_NAME + ".onCreate() called!");
 			new PluginsInitTask().execute();
 		}
 
@@ -44,7 +47,7 @@ public class PluginsWidgetService extends RemoteViewsService {
 		class PluginsInitTask extends AsyncTask<Void, Void, Void> {
 			@Override
 			protected Void doInBackground(Void... params) {
-				File dir = new File(DIR_PLUGIN);
+				File dir = new File(DIR_PLUGINS);
 				File[] plugins = dir.listFiles();
 				if (plugins == null || plugins.length == 0) {
 					return null;
