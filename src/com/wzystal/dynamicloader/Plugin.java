@@ -8,7 +8,7 @@ import android.content.pm.PackageInfo;
 public class Plugin {
 	private Context mContext;
 	private String pluginPath;// 存储路径
-	private String pluginName;// 应用名
+	private String pluginName;// 应用名称
 	private PackageInfo packageInfo;// 应用包信息
 	private String launcherActivityName;// 应用程序入口
 

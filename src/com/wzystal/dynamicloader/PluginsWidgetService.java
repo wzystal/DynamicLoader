@@ -39,19 +39,20 @@ public class PluginsWidgetService extends RemoteViewsService {
 		@Override
 		public void onCreate() {
 			LogHelper.d(TAG, CLASS_NAME + ".onCreate() called!");
-//			new PluginsInitTask().execute();
-			File dir = new File(DIR_PLUGINS);
-			File[] plugins = dir.listFiles();
-			if (plugins == null || plugins.length == 0) {
-				return;
-			}
-			for (File file : plugins) {
-				if (file.getName().endsWith(".apk")) {
-					Plugin plugin = new Plugin(mContext,
-							file.getAbsolutePath());
-					data.add(plugin);
-				}
-			}
+			// new PluginsInitTask().execute();
+			// // 读取应用信息
+			// File dir = new File(DIR_PLUGINS);
+			// File[] plugins = dir.listFiles();
+			// if (plugins == null || plugins.length == 0) {
+			// return;
+			// }
+			// for (File file : plugins) {
+			// if (file.getName().endsWith(".apk")) {
+			// Plugin plugin = new Plugin(mContext,
+			// file.getAbsolutePath());
+			// data.add(plugin);
+			// }
+			// }
 		}
 
 		// 异步任务--获取DIR_PLUGIN目录下的应用信息
@@ -116,6 +117,21 @@ public class PluginsWidgetService extends RemoteViewsService {
 
 		@Override
 		public void onDataSetChanged() {
+			LogHelper.d(TAG, CLASS_NAME + ".onDataSetChanged() called!");
+			// 读取应用信息
+			if (data.size() > 0)
+				data.clear();
+			File dir = new File(DIR_PLUGINS);
+			File[] plugins = dir.listFiles();
+			if (plugins == null || plugins.length == 0) {
+				return;
+			}
+			for (File file : plugins) {
+				if (file.getName().endsWith(".apk")) {
+					Plugin plugin = new Plugin(mContext, file.getAbsolutePath());
+					data.add(plugin);
+				}
+			}
 		}
 
 		@Override

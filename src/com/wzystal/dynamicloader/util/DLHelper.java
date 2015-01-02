@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 
 public class DLHelper{
 	public static Bitmap drawable2Bitmap(Drawable drawable) {
+		if(drawable==null) return null;
 		// 取 drawable 的长宽
 		int w = drawable.getIntrinsicWidth();
 		int h = drawable.getIntrinsicHeight();

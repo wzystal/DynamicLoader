@@ -24,11 +24,12 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		LogHelper.d(TAG, CLASS_NAME + ".onReceive() called!");
-//		String action = intent.getAction();
-//		AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-//		if (action.equals(ACTION_PLUGIN_CLICK)) {
-//
-//		}
+		// String action = intent.getAction();
+		// AppWidgetManager widgetManager =
+		// AppWidgetManager.getInstance(context);
+		// if (action.equals(ACTION_PLUGIN_CLICK)) {
+		//
+		// }
 	}
 
 	// 到达更新时间或者用户向桌面添加widget实例时调用。
@@ -38,16 +39,14 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		LogHelper.d(TAG, CLASS_NAME + ".onUpdate() called!");
 		for (int widgetId : appWidgetIds) {
-			// AppWidget中的视图及其绑定事件，都是通过RemoteViews来管理的
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 					R.layout.widget_plugins);
-			// PluginsWidgetService继承自RemoteViewsService，用于管理复杂视图（类似Adapter）
 			Intent serviceIntent = new Intent(context,
 					PluginsWidgetService.class);
-			// RemoteViews将复杂视图与其对应的Adapter绑定在一起
 			remoteViews.setRemoteAdapter(R.id.gridview_plugins, serviceIntent);
-			// 更新AppWidget管理器
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
+			PluginsObserver pluginsObserver = new PluginsObserver(DIR_PLUGINS, appWidgetManager, widgetId);
+			pluginsObserver.startWatching();
 		}
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
