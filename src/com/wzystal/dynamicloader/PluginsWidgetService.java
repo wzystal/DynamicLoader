@@ -1,10 +1,9 @@
-package com.wzystal.dynamicloader.widget;
+package com.wzystal.dynamicloader;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import com.ryg.utils.DLUtils;
-import com.wzystal.dynamicloader.Plugin;
 import com.wzystal.dynamicloader.R;
 import com.wzystal.dynamicloader.util.DLHelper;
 import com.wzystal.dynamicloader.util.LogHelper;
@@ -19,7 +18,7 @@ import static com.wzystal.dynamicloader.util.Constant.*;
 
 public class PluginsWidgetService extends RemoteViewsService {
 	private static final String CLASS_NAME = "PluginsWidgetService";
-	
+
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
 		return new GridRemoteViewsFactory(this, intent);
@@ -40,7 +39,19 @@ public class PluginsWidgetService extends RemoteViewsService {
 		@Override
 		public void onCreate() {
 			LogHelper.d(TAG, CLASS_NAME + ".onCreate() called!");
-			new PluginsInitTask().execute();
+//			new PluginsInitTask().execute();
+			File dir = new File(DIR_PLUGINS);
+			File[] plugins = dir.listFiles();
+			if (plugins == null || plugins.length == 0) {
+				return;
+			}
+			for (File file : plugins) {
+				if (file.getName().endsWith(".apk")) {
+					Plugin plugin = new Plugin(mContext,
+							file.getAbsolutePath());
+					data.add(plugin);
+				}
+			}
 		}
 
 		// 异步任务--获取DIR_PLUGIN目录下的应用信息

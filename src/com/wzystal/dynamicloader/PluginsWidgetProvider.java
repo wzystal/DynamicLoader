@@ -1,6 +1,5 @@
-package com.wzystal.dynamicloader.widget;
+package com.wzystal.dynamicloader;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -25,11 +24,11 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		LogHelper.d(TAG, CLASS_NAME + ".onReceive() called!");
-		String action = intent.getAction();
-		AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-		if (action.equals(ACTION_PLUGIN_CLICK)) {
-
-		}
+//		String action = intent.getAction();
+//		AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+//		if (action.equals(ACTION_PLUGIN_CLICK)) {
+//
+//		}
 	}
 
 	// 到达更新时间或者用户向桌面添加widget实例时调用。
@@ -37,9 +36,7 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-		System.out.println(CLASS_NAME + ".onUpdate() called!");
-		Log.d(TAG, CLASS_NAME + ".onUpdate() called!");
+		LogHelper.d(TAG, CLASS_NAME + ".onUpdate() called!");
 		for (int widgetId : appWidgetIds) {
 			// AppWidget中的视图及其绑定事件，都是通过RemoteViews来管理的
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -52,7 +49,7 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			// 更新AppWidget管理器
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
-		Toast.makeText(context, CLASS_NAME + ".onUpdate() called!", Toast.LENGTH_LONG).show();
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
 	// widget从桌面移除时调用

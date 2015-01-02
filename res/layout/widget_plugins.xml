@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_widget" >
+    android:layout_height="match_parent" >
 
+    <!--
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
@@ -11,12 +11,12 @@
         android:gravity="center"
         android:text="Hello, AppWidget!"
         android:textSize="24dp" />
+    -->
 
     <GridView
         android:id="@+id/gridview_plugins"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tv_title"
         android:horizontalSpacing="10dp"
         android:numColumns="4"
         android:verticalSpacing="10dp" />
