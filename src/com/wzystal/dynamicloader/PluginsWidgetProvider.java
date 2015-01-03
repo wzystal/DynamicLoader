@@ -32,7 +32,7 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 					AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 			String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
-			Toast.makeText(context, "正在加载 " + pluginName + "...",
+			Toast.makeText(context, "正在加载 " + pluginName + " ...",
 					Toast.LENGTH_SHORT).show();
 		}
 		super.onReceive(context, intent);
