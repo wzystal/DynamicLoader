@@ -1,5 +1,6 @@
 package com.wzystal.dynamicloader;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -15,21 +16,26 @@ import static com.wzystal.dynamicloader.util.Constant.*;
 
 public class PluginsWidgetProvider extends AppWidgetProvider {
 	public static final String CLASS_NAME = "PluginsWidgetProvider";
-	public static final String ACTION_PLUGIN = "com.wzystal.dynamicloader.ACTION_PLUGIN";
-	public static final String EXTRA_PLUGIN = "com.wzystal.dynamicloader.EXTRA_PLUGIN";
-	public static final String ACTION_PLUGIN_CLICK = "com.wzystal.dynamicloader.ACTION_PLUGIN_CLICK";
 
 	// 每个请求都会传递给onReceive方法，该方法根据Intent的action类型来决定自己处理还是分发给其他方法
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		AppWidgetManager appWidgetManager = AppWidgetManager
+				.getInstance(context);
+		LogHelper.d(
+				TAG,
+				CLASS_NAME + ".onReceive() called! Action="
+						+ intent.getAction());
+		if (action.equals(ACTION_GRIDVIEW_PLUGINS)) {
+			int appWidgetId = intent.getIntExtra(
+					AppWidgetManager.EXTRA_APPWIDGET_ID,
+					AppWidgetManager.INVALID_APPWIDGET_ID);
+			String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
+			Toast.makeText(context, "正在加载 " + pluginName + "...",
+					Toast.LENGTH_SHORT).show();
+		}
 		super.onReceive(context, intent);
-		LogHelper.d(TAG, CLASS_NAME + ".onReceive() called!");
-		// String action = intent.getAction();
-		// AppWidgetManager widgetManager =
-		// AppWidgetManager.getInstance(context);
-		// if (action.equals(ACTION_PLUGIN_CLICK)) {
-		//
-		// }
 	}
 
 	// 到达更新时间或者用户向桌面添加widget实例时调用。
@@ -44,8 +50,25 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			Intent serviceIntent = new Intent(context,
 					PluginsWidgetService.class);
 			remoteViews.setRemoteAdapter(R.id.gridview_plugins, serviceIntent);
+
+			/**
+			 * 一般使用setOnClickPendingIntent方法来设置一个控件的点击事件。 但对于复杂视图中的子项，
+			 * 需要先用setPendingIntentTemplate方法为复杂试图整体的点击事件设置一个处理的PendingIntent，
+			 * 然后通过RemoteViewsFactory使用setOnClickFillInIntent为复杂视图中的每一项传入一个与该项相关的Intent
+			 * 。 该Intent会被合入处理时接收到Intent中。
+			 */
+			Intent gridIntent = new Intent();
+			gridIntent.setAction(ACTION_GRIDVIEW_PLUGINS);
+			gridIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+					0, gridIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			remoteViews.setPendingIntentTemplate(R.id.gridview_plugins,
+					pendingIntent);
+
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
-			PluginsObserver pluginsObserver = new PluginsObserver(DIR_PLUGINS, appWidgetManager, widgetId);
+
+			PluginsObserver pluginsObserver = new PluginsObserver(DIR_PLUGINS,
+					appWidgetManager, widgetId);
 			pluginsObserver.startWatching();
 		}
 		super.onUpdate(context, appWidgetManager, appWidgetIds);

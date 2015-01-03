@@ -27,7 +27,7 @@ public class PluginAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (null == convertView) {
-			convertView = View.inflate(mContext, R.layout.gridview_item_plugin, null);
+			convertView = View.inflate(mContext, R.layout.gridview_item_plugins, null);
 			holder = new ViewHolder();
 			holder.appIcon = (ImageView) convertView
 					.findViewById(R.id.iv_plugin_icon);

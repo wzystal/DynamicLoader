@@ -78,15 +78,16 @@ public class PluginsWidgetService extends RemoteViewsService {
 		@Override
 		public RemoteViews getViewAt(int position) {
 			RemoteViews rv = new RemoteViews(mContext.getPackageName(),
-					R.layout.gridview_item_plugin);
+					R.layout.gridview_item_plugins);
 			Plugin plugin = data.get(position);
 			rv.setImageViewBitmap(R.id.iv_plugin_icon, DLHelper
 					.drawable2Bitmap(DLUtils.getAppIcon(mContext,
 							plugin.getPluginPath())));
 			rv.setTextViewText(R.id.tv_plugin_name, plugin.getPluginName());
+			// 设置第position位的“视图”对应的响应事件
 			Intent intent = new Intent();
-			intent.putExtra(PluginsWidgetProvider.EXTRA_PLUGIN, position);
-			rv.setOnClickFillInIntent(R.id.gridview_plugins, intent);
+			intent.putExtra(EXTRA_PLUGIN_NAME, plugin.getPluginName());
+			rv.setOnClickFillInIntent(R.id.gridview_item_plugins, intent);
 			return rv;
 		}
 

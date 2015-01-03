@@ -22,6 +22,7 @@
 
                 <!-- 必须要声明APPWIDGET_UPDATE，否则该widget不会出现在小工具列表中 -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.wzystal.dynamicloader.ACTION_GRIDVIEW_PLUGINS" />
             </intent-filter>
 
             <meta-data
