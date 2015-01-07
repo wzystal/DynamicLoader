@@ -24,12 +24,20 @@ public class PluginsObserver extends FileObserver {
 		switch (event) {
 		case FileObserver.MOVED_TO:
 			LogHelper.d(TAG, "FileObserver.MOVED_TO");
+			mWidgetManager.notifyAppWidgetViewDataChanged(mWidgetId, R.id.gridview_plugins);
+			break;
 		case FileObserver.CREATE:
 			LogHelper.d(TAG, "FileObserver.CREATE");
+			mWidgetManager.notifyAppWidgetViewDataChanged(mWidgetId, R.id.gridview_plugins);
+			break;
 		case FileObserver.MOVED_FROM:
 			LogHelper.d(TAG, "FileObserver.MOVED_FROM");
+			mWidgetManager.notifyAppWidgetViewDataChanged(mWidgetId, R.id.gridview_plugins);
+			break;
 		case FileObserver.DELETE_SELF:
 			LogHelper.d(TAG, "FileObserver.DELETE_SELF");
+			mWidgetManager.notifyAppWidgetViewDataChanged(mWidgetId, R.id.gridview_plugins);
+			break;
 		case FileObserver.DELETE:
 			LogHelper.d(TAG, "FileObserver.DELETE");
 			mWidgetManager.notifyAppWidgetViewDataChanged(mWidgetId, R.id.gridview_plugins);
@@ -38,4 +46,6 @@ public class PluginsObserver extends FileObserver {
 			break;
 		}
 	}
+	
+	
 }

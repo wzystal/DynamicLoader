@@ -7,55 +7,65 @@ import android.content.pm.PackageInfo;
 
 public class Plugin {
 	private Context mContext;
-	private String pluginPath;// 存储路径
-	private String pluginName;// 应用名称
-	private PackageInfo packageInfo;// 应用包信息
-	private String launcherActivityName;// 应用程序入口
+	private String mPluginPath;// 存储路径
+	private String mPluginName;// 应用名称
+	private String mPackageName;// 应用包名
+	private PackageInfo mPackageInfo;// 应用包信息
+	private String mLauncherActivity;// 应用程序入口
 
 	public Plugin(Context context, String pluginPath) {
-		this.mContext = context;
-		this.pluginPath = pluginPath;
+		mContext = context;
+		mPluginPath = pluginPath;
 		CharSequence charSequence = DLUtils.getAppLabel(mContext, pluginPath);
 		if (charSequence != null) {
-			this.pluginName = charSequence.toString();
+			mPluginName = charSequence.toString();
 		}
-		this.packageInfo = DLUtils.getPackageInfo(mContext, pluginPath);
-		if (null != this.packageInfo && this.packageInfo.activities != null
-				&& this.packageInfo.activities.length > 0) {
-			this.setLauncherActivityName(this.packageInfo.activities[0].name);
+		mPackageInfo = DLUtils.getPackageInfo(mContext, pluginPath);
+		mPackageName = mPackageInfo.packageName;
+		if (null != mPackageInfo && mPackageInfo.activities != null
+				&& mPackageInfo.activities.length > 0) {
+			mLauncherActivity = mPackageInfo.activities[0].name;
 		}
 	}
 
 	public String getPluginPath() {
-		return pluginPath;
+		return mPluginPath;
 	}
 
 	public void setPluginPath(String pluginPath) {
-		this.pluginPath = pluginPath;
+		mPluginPath = pluginPath;
 	}
 
 	public String getPluginName() {
-		return pluginName;
+		return mPluginName;
 	}
 
 	public void setPluginName(String pluginName) {
-		this.pluginName = pluginName;
+		mPluginName = pluginName;
+	}
+
+	public String getPackageName() {
+		return mPackageName;
+	}
+
+	public void setPackageName(String packageName) {
+		mPackageName = packageName;
 	}
 
 	public PackageInfo getPackageInfo() {
-		return packageInfo;
+		return mPackageInfo;
 	}
 
 	public void setPackageInfo(PackageInfo packageInfo) {
-		this.packageInfo = packageInfo;
+		mPackageInfo = packageInfo;
 	}
 
-	public String getLauncherActivityName() {
-		return launcherActivityName;
+	public String getLauncherActivity() {
+		return mLauncherActivity;
 	}
 
-	public void setLauncherActivityName(String launcherActivityName) {
-		this.launcherActivityName = launcherActivityName;
+	public void setLauncherActivity(String launcherActivity) {
+		mLauncherActivity = launcherActivity;
 	}
 
 	@Override
@@ -64,6 +74,6 @@ public class Plugin {
 			return false;
 		Plugin other = (Plugin) o;
 		return (this == other)
-				|| (this.pluginPath.equals(other.getPluginPath()));
+				|| (mPluginPath.equals(other.getPluginPath()));
 	}
 }

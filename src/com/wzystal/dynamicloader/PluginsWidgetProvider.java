@@ -1,15 +1,19 @@
 package com.wzystal.dynamicloader;
 
+import java.util.List;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.wzystal.dynamicloader.R;
+import com.wzystal.dynamicloader.util.DLHelper;
 import com.wzystal.dynamicloader.util.LogHelper;
 
 import static com.wzystal.dynamicloader.util.Constant.*;
@@ -32,8 +36,20 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 					AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 			String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
-			Toast.makeText(context, "正在加载 " + pluginName + " ...",
-					Toast.LENGTH_SHORT).show();
+			String pluginPath = intent.getStringExtra(EXTRA_PLUGIN_PATH);
+			String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
+			List<String> installedPackageList = DLHelper
+					.getInstalledPackageName(context);
+			if (installedPackageList.contains(packageName)) {
+				Intent launcherIntent = context.getPackageManager()
+						.getLaunchIntentForPackage(packageName);
+				context.startActivity(launcherIntent);
+			}else {
+				
+				Toast.makeText(context, "正在加载 " + packageName + " : " + pluginPath,
+						Toast.LENGTH_SHORT).show();
+				
+			}
 		}
 		super.onReceive(context, intent);
 	}

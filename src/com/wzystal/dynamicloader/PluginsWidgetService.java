@@ -27,9 +27,11 @@ public class PluginsWidgetService extends RemoteViewsService {
 	private class GridRemoteViewsFactory implements RemoteViewsFactory {
 		private Context mContext;
 		private int mWidgetId;
+		private File pluginsDir;
 		private ArrayList<Plugin> data = new ArrayList<Plugin>();
 
 		public GridRemoteViewsFactory(Context context, Intent intent) {
+			pluginsDir = new File(DIR_PLUGINS);
 			mContext = context;
 			mWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -86,7 +88,9 @@ public class PluginsWidgetService extends RemoteViewsService {
 			rv.setTextViewText(R.id.tv_plugin_name, plugin.getPluginName());
 			// 设置第position位的“视图”对应的响应事件
 			Intent intent = new Intent();
+			intent.putExtra(EXTRA_PLUGIN_PATH, plugin.getPluginPath());
 			intent.putExtra(EXTRA_PLUGIN_NAME, plugin.getPluginName());
+			intent.putExtra(EXTRA_PACKAGE_NAME, plugin.getPackageName());
 			rv.setOnClickFillInIntent(R.id.gridview_item_plugins, intent);
 			return rv;
 		}
@@ -122,8 +126,7 @@ public class PluginsWidgetService extends RemoteViewsService {
 			// 读取应用信息
 			if (data.size() > 0)
 				data.clear();
-			File dir = new File(DIR_PLUGINS);
-			File[] plugins = dir.listFiles();
+			File[] plugins = pluginsDir.listFiles();
 			if (plugins == null || plugins.length == 0) {
 				return;
 			}

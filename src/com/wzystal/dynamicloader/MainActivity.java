@@ -113,7 +113,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
 				Toast.LENGTH_LONG).show();
 		Class<?> proxyCls = null;
 		try {
-			Class<?> cls = Class.forName(item.getLauncherActivityName(), false,
+			Class<?> cls = Class.forName(item.getLauncherActivity(), false,
 					DLClassLoader.getClassLoader(item.getPluginPath(),
 							getApplicationContext(), getClassLoader()));
 			if (cls.asSubclass(DLBasePluginActivity.class) != null) {
@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
 			Toast.makeText(
 					this,
 					"load plugin apk failed, load class "
-							+ item.getLauncherActivityName() + " failed.",
+							+ item.getLauncherActivity() + " failed.",
 					Toast.LENGTH_SHORT).show();
 		} catch (ClassCastException e) {
 			e.printStackTrace();
