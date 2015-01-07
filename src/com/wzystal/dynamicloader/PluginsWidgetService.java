@@ -91,6 +91,7 @@ public class PluginsWidgetService extends RemoteViewsService {
 			intent.putExtra(EXTRA_PLUGIN_PATH, plugin.getPluginPath());
 			intent.putExtra(EXTRA_PLUGIN_NAME, plugin.getPluginName());
 			intent.putExtra(EXTRA_PACKAGE_NAME, plugin.getPackageName());
+			intent.putExtra(EXTRA_LAUNCHER_ACTIVITY, plugin.getLauncherActivity());
 			rv.setOnClickFillInIntent(R.id.gridview_item_plugins, intent);
 			return rv;
 		}

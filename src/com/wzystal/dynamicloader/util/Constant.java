@@ -10,4 +10,5 @@ public class Constant {
 	public static final String EXTRA_PLUGIN_PATH = "com.wzystal.dynamicloader.EXTRA_PLUGIN_PATH";
 	public static final String EXTRA_PLUGIN_NAME = "com.wzystal.dynamicloader.EXTRA_PLUGIN_NAME";
 	public static final String EXTRA_PACKAGE_NAME = "com.wzystal.dynamicloader.EXTRA_PACKAGE_NAME";
+	public static final String EXTRA_LAUNCHER_ACTIVITY = "com.wzystal.dynamicloader.EXTRA_LAUNCHER_ACTIVITY";
 }

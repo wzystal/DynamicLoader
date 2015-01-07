@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.ryg.dynamicload.internal.DLIntent;
+import com.ryg.dynamicload.internal.DLPluginManager;
 import com.wzystal.dynamicloader.R;
 import com.wzystal.dynamicloader.util.DLHelper;
 import com.wzystal.dynamicloader.util.LogHelper;
@@ -38,6 +40,7 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
 			String pluginPath = intent.getStringExtra(EXTRA_PLUGIN_PATH);
 			String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
+			String launcherActivity = intent.getStringExtra(EXTRA_LAUNCHER_ACTIVITY);
 			List<String> installedPackageList = DLHelper
 					.getInstalledPackageName(context);
 			if (installedPackageList.contains(packageName)) {
@@ -45,7 +48,8 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 						.getLaunchIntentForPackage(packageName);
 				context.startActivity(launcherIntent);
 			}else {
-				
+				DLPluginManager pluginManager = DLPluginManager.getInstance(context);
+		        pluginManager.startPluginActivity(context, new DLIntent(packageName, launcherActivity));
 				Toast.makeText(context, "正在加载 " + packageName + " : " + pluginPath,
 						Toast.LENGTH_SHORT).show();
 				
