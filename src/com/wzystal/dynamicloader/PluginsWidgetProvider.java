@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -27,17 +28,17 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		AppWidgetManager appWidgetManager = AppWidgetManager
-				.getInstance(context);
 		LogHelper.d(
 				TAG,
 				CLASS_NAME + ".onReceive() called! Action="
 						+ intent.getAction());
+		// AppWidgetManager appWidgetManager = AppWidgetManager
+		// .getInstance(context);
+		// int[] appWidgetIds = appWidgetManager
+		// .getAppWidgetIds(new ComponentName(context,
+		// PluginsWidgetProvider.class));
 		if (action.equals(ACTION_GRIDVIEW_PLUGINS)) {
-			int appWidgetId = intent.getIntExtra(
-					AppWidgetManager.EXTRA_APPWIDGET_ID,
-					AppWidgetManager.INVALID_APPWIDGET_ID);
-			String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
+			// String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
 			String pluginPath = intent.getStringExtra(EXTRA_PLUGIN_PATH);
 			String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
 			String launcherActivity = intent
@@ -55,13 +56,13 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 				DLPluginManager pluginManager = DLPluginManager
 						.getInstance(context);
 				pluginManager.loadApk(pluginPath);
-				DLIntent dlIntent = new DLIntent(
-						packageName, launcherActivity);
+				DLIntent dlIntent = new DLIntent(packageName, launcherActivity);
 				dlIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				pluginManager.startPluginActivity(context, dlIntent);
 			}
+		} else {
+			super.onReceive(context, intent);
 		}
-		super.onReceive(context, intent);
 	}
 
 	// 到达更新时间或者用户向桌面添加widget实例时调用。
@@ -70,13 +71,13 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
 		LogHelper.d(TAG, CLASS_NAME + ".onUpdate() called!");
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		for (int widgetId : appWidgetIds) {
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 					R.layout.widget_plugins);
 			Intent serviceIntent = new Intent(context,
 					PluginsWidgetService.class);
 			remoteViews.setRemoteAdapter(R.id.gridview_plugins, serviceIntent);
-
 			/**
 			 * 一般使用setOnClickPendingIntent方法来设置一个控件的点击事件。 但对于复杂视图中的子项，
 			 * 需要先用setPendingIntentTemplate方法为复杂试图整体的点击事件设置一个处理的PendingIntent，
@@ -90,14 +91,11 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 					0, gridIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			remoteViews.setPendingIntentTemplate(R.id.gridview_plugins,
 					pendingIntent);
-
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
-
 			PluginsObserver pluginsObserver = new PluginsObserver(DIR_PLUGINS,
 					appWidgetManager, widgetId);
 			pluginsObserver.startWatching();
 		}
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
 	// widget从桌面移除时调用
