@@ -3,6 +3,7 @@ package com.wzystal.dynamicloader;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.ryg.dynamicload.internal.DLPluginManager;
 import com.ryg.utils.DLUtils;
 import com.wzystal.dynamicloader.R;
 import com.wzystal.dynamicloader.util.DLHelper;

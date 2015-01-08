@@ -40,19 +40,25 @@ public class PluginsWidgetProvider extends AppWidgetProvider {
 			String pluginName = intent.getStringExtra(EXTRA_PLUGIN_NAME);
 			String pluginPath = intent.getStringExtra(EXTRA_PLUGIN_PATH);
 			String packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
-			String launcherActivity = intent.getStringExtra(EXTRA_LAUNCHER_ACTIVITY);
+			String launcherActivity = intent
+					.getStringExtra(EXTRA_LAUNCHER_ACTIVITY);
 			List<String> installedPackageList = DLHelper
 					.getInstalledPackageName(context);
 			if (installedPackageList.contains(packageName)) {
 				Intent launcherIntent = context.getPackageManager()
 						.getLaunchIntentForPackage(packageName);
 				context.startActivity(launcherIntent);
-			}else {
-				DLPluginManager pluginManager = DLPluginManager.getInstance(context);
-		        pluginManager.startPluginActivity(context, new DLIntent(packageName, launcherActivity));
-				Toast.makeText(context, "正在加载 " + packageName + " : " + pluginPath,
+			} else {
+				Toast.makeText(context,
+						"正在加载 " + packageName + " : " + pluginPath,
 						Toast.LENGTH_SHORT).show();
-				
+				DLPluginManager pluginManager = DLPluginManager
+						.getInstance(context);
+				pluginManager.loadApk(pluginPath);
+				DLIntent dlIntent = new DLIntent(
+						packageName, launcherActivity);
+				dlIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				pluginManager.startPluginActivity(context, dlIntent);
 			}
 		}
 		super.onReceive(context, intent);
