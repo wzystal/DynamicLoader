@@ -2,17 +2,18 @@ package com.wzystal.dynamicloader;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import com.ryg.dynamicload.internal.DLPluginManager;
+import java.util.List;
 import com.ryg.utils.DLUtils;
 import com.wzystal.dynamicloader.R;
 import com.wzystal.dynamicloader.util.DLHelper;
 import com.wzystal.dynamicloader.util.LogHelper;
 
+import eu.chainfire.libsuperuser.Shell;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 import static com.wzystal.dynamicloader.util.Constant.*;
@@ -32,7 +33,7 @@ public class PluginsWidgetService extends RemoteViewsService {
 		private ArrayList<Plugin> data = new ArrayList<Plugin>();
 
 		public GridRemoteViewsFactory(Context context, Intent intent) {
-			pluginsDir = new File(DIR_PLUGINS);
+			pluginsDir = new File(LOCAL_DIR);
 			mContext = context;
 			mWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -42,39 +43,42 @@ public class PluginsWidgetService extends RemoteViewsService {
 		@Override
 		public void onCreate() {
 			LogHelper.d(TAG, CLASS_NAME + ".onCreate() called!");
-			// new PluginsInitTask().execute();
-			// // 读取应用信息
-			// File dir = new File(DIR_PLUGINS);
-			// File[] plugins = dir.listFiles();
-			// if (plugins == null || plugins.length == 0) {
-			// return;
-			// }
-			// for (File file : plugins) {
-			// if (file.getName().endsWith(".apk")) {
-			// Plugin plugin = new Plugin(mContext,
-			// file.getAbsolutePath());
-			// data.add(plugin);
-			// }
-			// }
+			//挂载NFS目录
+			String cmd = NFS_MOUNT + " " + NFS_DIR + " " + LOCAL_DIR + " " + NFS_PARAMS;
+			new MountTask().execute(cmd);
 		}
 
-		// 异步任务--获取DIR_PLUGIN目录下的应用信息
-		class PluginsInitTask extends AsyncTask<Void, Void, Void> {
+		private class MountTask extends AsyncTask<String, Void, Void>{
 			@Override
-			protected Void doInBackground(Void... params) {
-				File dir = new File(DIR_PLUGINS);
-				File[] plugins = dir.listFiles();
-				if (plugins == null || plugins.length == 0) {
-					return null;
-				}
-				for (File file : plugins) {
-					if (file.getName().endsWith(".apk")) {
-						Plugin plugin = new Plugin(mContext,
-								file.getAbsolutePath());
-						data.add(plugin);
-					}
-				}
+			protected Void doInBackground(String...list) {
+				String cmd = list[0];
+				Log.d(TAG, "是否获得ROOT权限：" + (Shell.SU.available() ? "是" : "否"));
+				Log.d(TAG, "开始执行shell命令： \n" + cmd);
+				List<String> suResult = Shell.SU.run(cmd);
+				Log.d(TAG, "执行结果： \n" + suResult.toString());
 				return null;
+			}
+		}
+		
+		@Override
+		public void onDataSetChanged() {
+			LogHelper.d(TAG, CLASS_NAME + ".onDataSetChanged() called!");
+			initData();
+		}
+
+		private void initData() {
+			// 读取应用信息
+			if (data.size() > 0)
+				data.clear();
+			File[] plugins = pluginsDir.listFiles();
+			if (plugins == null || plugins.length == 0) {
+				return;
+			}
+			for (File file : plugins) {
+				if (file.getName().endsWith(".apk")) {
+					Plugin plugin = new Plugin(mContext, file.getAbsolutePath());
+					data.add(plugin);
+				}
 			}
 		}
 
@@ -92,7 +96,8 @@ public class PluginsWidgetService extends RemoteViewsService {
 			intent.putExtra(EXTRA_PLUGIN_PATH, plugin.getPluginPath());
 			intent.putExtra(EXTRA_PLUGIN_NAME, plugin.getPluginName());
 			intent.putExtra(EXTRA_PACKAGE_NAME, plugin.getPackageName());
-			intent.putExtra(EXTRA_LAUNCHER_ACTIVITY, plugin.getLauncherActivity());
+			intent.putExtra(EXTRA_LAUNCHER_ACTIVITY,
+					plugin.getLauncherActivity());
 			rv.setOnClickFillInIntent(R.id.gridview_item_plugins, intent);
 			return rv;
 		}
@@ -123,26 +128,28 @@ public class PluginsWidgetService extends RemoteViewsService {
 		}
 
 		@Override
-		public void onDataSetChanged() {
-			LogHelper.d(TAG, CLASS_NAME + ".onDataSetChanged() called!");
-			// 读取应用信息
-			if (data.size() > 0)
-				data.clear();
-			File[] plugins = pluginsDir.listFiles();
-			if (plugins == null || plugins.length == 0) {
-				return;
-			}
-			for (File file : plugins) {
-				if (file.getName().endsWith(".apk")) {
-					Plugin plugin = new Plugin(mContext, file.getAbsolutePath());
-					data.add(plugin);
-				}
-			}
-		}
-
-		@Override
 		public void onDestroy() {
 			data.clear();
+		}
+
+		// 异步任务--获取DIR_PLUGIN目录下的应用信息
+		class PluginsInitTask extends AsyncTask<Void, Void, Void> {
+			@Override
+			protected Void doInBackground(Void... params) {
+				File dir = new File(DIR_PLUGINS);
+				File[] plugins = dir.listFiles();
+				if (plugins == null || plugins.length == 0) {
+					return null;
+				}
+				for (File file : plugins) {
+					if (file.getName().endsWith(".apk")) {
+						Plugin plugin = new Plugin(mContext,
+								file.getAbsolutePath());
+						data.add(plugin);
+					}
+				}
+				return null;
+			}
 		}
 	}
 }
