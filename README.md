@@ -2,8 +2,6 @@
 
 基于 [任玉刚 dl-lib](https://github.com/DingMouRen/AndroidDynamicLoader) 的 Android 插件动态加载学习 Demo。扫描外置存储中的 APK，在桌面 Widget 上以网格展示，点击后通过 `DLPluginManager` 免安装启动插件 Activity。
 
-> 作者：Young Z. Wang（wzystal@gmail.com） · 开发周期：2014.10 — 2015.01
-
 ## 项目背景
 
 本项目是 Android 插件化技术的实践工程，核心目标是验证 **dl-lib 动态加载框架** 的可行性，并探索不同的插件展示与启动方式。经历了从 Activity 内嵌列表到桌面 Widget 的 UI 迁移，以及从底层 `DLClassLoader` 到高层 `DLPluginManager` 的 API 升级。
